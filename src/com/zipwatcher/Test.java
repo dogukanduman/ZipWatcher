@@ -9,13 +9,13 @@ public class Test
 	public static void main(String[] args) {
 	   
 		 String listenedFolderPath;
-		 listenedFolderPath="/Users/ttdduman/downLoads";
+		 listenFolderPath="/Users/ttdduman/downLoads";
 		 
 		if (args.length > 0) {
 			listenedFolderPath = args[0];
 		}
-		System.out.println("Folder Path: " + listenedFolderPath);
-		new ZipWatcher(listenedFolderPath, new ZipWatcherDelegate() {
+		System.out.println("Folder Path: " + listenFolderPath);
+		new ZipWatcher(listenFolderPath, new ZipWatcherDelegate() {
 			
 			@Override
 			public void unZipFile(String fileName) {
