@@ -8,7 +8,7 @@ public class Test
 	
 	public static void main(String[] args) {
 	   
-		 String listenedFolderPath;
+		 String listenFolderPath;
 		 listenFolderPath="/Users/ttdduman/downLoads";
 		 
 		if (args.length > 0) {
