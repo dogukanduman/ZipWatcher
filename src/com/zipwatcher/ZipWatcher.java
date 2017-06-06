@@ -82,12 +82,13 @@ public class ZipWatcher implements FolderWatcherDelegate {
 					fos.write(buffer, 0, len);
 				}
 				fos.close();
-				delegate.unZipFile(fileName);
+				delegate.unZippedFile(fileName);
 				ze = zis.getNextEntry();
 			}
 
 			zis.closeEntry();
 			zis.close();
+			delegate.unZipFinished(outPutPath);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

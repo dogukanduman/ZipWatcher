@@ -19,9 +19,14 @@ public class Test {
 		new ZipWatcher(listenedFolderPath, true, new ZipWatcherDelegate() {
 
 			@Override
-			public void unZipFile(String fileName) {
+			public void unZippedFile(String fileName) {
 				System.out.println("UnZipped File:" + fileName);
 
+			}
+
+			@Override
+			public void unZipFinished(String outPutFolderName) {
+				System.out.println("Unzipping finished successfully to:"+outPutFolderName);
 			}
 		});
 
