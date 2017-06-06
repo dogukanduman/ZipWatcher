@@ -10,11 +10,14 @@ import java.util.zip.ZipInputStream;
 
 import com.folderwatcher.FolderWatcher;
 import com.folderwatcher.FolderWatcherDelegate;
+import com.zipwatcher.utilities.FileHelper;
 
 public class ZipWatcher implements FolderWatcherDelegate {
 
 	private ZipWatcherDelegate delegate;
 	private String listenPath;
+	boolean createDirectory;
+	private String outPutPath;
 
 	public ZipWatcher(String listenPath) {
 
@@ -23,18 +26,29 @@ public class ZipWatcher implements FolderWatcherDelegate {
 		new FolderWatcher(this, listenPath);
 	}
 
-	public ZipWatcher(String listenPath,ZipWatcherDelegate delegate) {
+	public ZipWatcher(String listenPath, boolean createDirectory, ZipWatcherDelegate delegate) {
+
 		this.listenPath = listenPath;
-        this.delegate=delegate;
+		this.delegate = delegate;
+		this.createDirectory = createDirectory;
+		this.outPutPath = listenPath;
+
 		new FolderWatcher(this, listenPath);
 	}
-	
-	
-	
+
 	@Override
 	public void created(String fileName) {
-		if (isZipFile(fileName)) {
+
+		if (FileHelper.isZipFile(fileName)) {
+
+			if (createDirectory) {
+
+				outPutPath = this.listenPath + "/" + FileHelper.getFileName(fileName);
+				FileHelper.createDirectory(outPutPath);
+			}
+
 			System.out.println("Zip File: " + fileName);
+
 			unZip(fileName);
 		}
 	}
@@ -42,12 +56,10 @@ public class ZipWatcher implements FolderWatcherDelegate {
 	@Override
 	public void deleted(String fileName) {
 
-
 	}
 
 	@Override
 	public void modified(String fileName) {
-		
 
 	}
 
@@ -63,7 +75,7 @@ public class ZipWatcher implements FolderWatcherDelegate {
 				fileName = ze.getName();
 				File newFile = new File(fileName);
 
-				FileOutputStream fos = new FileOutputStream(this.listenPath + "/" + newFile);
+				FileOutputStream fos = new FileOutputStream(outPutPath + "/" + newFile);
 
 				int len;
 				while ((len = zis.read(buffer)) > 0) {
@@ -81,19 +93,6 @@ public class ZipWatcher implements FolderWatcherDelegate {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public boolean isZipFile(String logFileName) {
-
-		String[] split = logFileName.split("\\.");
-		String ext = split[split.length - 1];
-
-		if (!ext.equals("zip")) {
-			return false;
-		}
-		
-		return true;
-
 	}
 
 	public void setDelegate(ZipWatcherDelegate delegate) {
